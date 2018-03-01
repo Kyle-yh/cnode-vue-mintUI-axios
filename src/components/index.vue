@@ -69,7 +69,7 @@
                 <ul>
                     <li @click="goMine()">个人中心</li>
                     <li @click="goEidt()">发表主题</li>
-                    <li @click="goMessage()">消息</li>
+                    <li @click="goMessage()">消息  <mt-badge type="error" size="small" v-if="count > 0">{{count}}</mt-badge></li>
                     <li @click="goCollect()">我的收藏</li>
                     <li @click="exit()">退出帐号</li>
                 </ul>
@@ -107,11 +107,12 @@ export default {
       askPage: 2,
       jobPage: 2,
       popupVisible: false,
-      position:"广州市"
+      position:"广州市",
+      count:0
     };
   },
   computed: {
-    ...mapState(["isLogin", "profile"])
+    ...mapState(["isLogin", "profile","accesstoken"])
   },
   created() {
     let isLogin = sessionStorage.getItem("isLogin");
@@ -119,6 +120,7 @@ export default {
       this.setLogin();
       let profile = JSON.parse(sessionStorage.getItem("profile"));
       this.setProfile(profile);
+      this.setAccesstoken(sessionStorage.getItem("accesstoken"));
     }
     request.getTopics("all").then(res => {
       this.allItem = res.data.data;
@@ -129,12 +131,15 @@ export default {
     request.getPosition().then(res => {
       this.position = res.city
     })
+    request.getCount(this.accesstoken).then(res=>{
+      this.count = res.data.data;
+    })
   },
   mounted() {
       this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
   },
   methods: {
-    ...mapMutations(["setLogin", "setProfile", "exitUser"]),
+    ...mapMutations(["setLogin", "setProfile", "exitUser","setAccesstoken"]),
     goLogin() {
       this.$router.push({ name: "login" });
     },

@@ -146,6 +146,28 @@ const saveTopic = (accesstoken,title,tab,content) => {
     })
 }
 
+//获取未读消息数
+const getCount = (accesstoken) =>{
+    let url = `${apiUrl}/message/count?accesstoken=${accesstoken}`;
+    return httpRequest(url)
+}
+
+//标记全部为已读
+const setAllReaded = (accesstoken) =>{
+    let url = `${apiUrl}/message/mark_all`;
+    return httpRequest(url,{
+        accesstoken:accesstoken
+    })
+}
+
+//标记单个为已读
+const setReaded = (accesstoken,msg_id) =>{
+    let url = `${apiUrl}/message/mark_one/${msg_id}`;
+    return httpRequest(url,{
+        accesstoken:accesstoken
+    })
+}
+
 export default {
     getTopics,
     getDetail,
@@ -158,5 +180,8 @@ export default {
     deCollect,
     getCollect,
     getMessage,
-    saveTopic
+    saveTopic,
+    getCount,
+    setAllReaded,
+    setReaded
 }
