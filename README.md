@@ -1,6 +1,6 @@
 # cnode
 
-> vue+element
+> vue+mintui+axios
 
 ## Build Setup
 
