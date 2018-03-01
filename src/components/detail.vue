@@ -98,6 +98,7 @@ export default {
     collect(is_collect){
         if(!this.isLogin){
             this.goLogin();
+            return;
         }
         if(!is_collect){
             request.collect(this.accesstoken,this.item.id).then(res=>{
@@ -196,35 +197,40 @@ export default {
             this.loginname = this.item.author.loginname;
             this.replies = this.item.replies;
             console.log(this.item)
-            for (let i = 0; i < this.replies.length; i++) {
-                this.replies[i].showText = false;
-                this.replies[i].textContent = '';
-                for(let z = 0;z < this.replies[i].ups.length;z++){
-                    if(this.replies[i].ups[z] == this.profile.id){
-                        this.replies[i].action = 'up';
-                    }else{
-                        this.replies[i].action = 'down';
+            if(this.isLogin){
+                for (let i = 0; i < this.replies.length; i++) {
+                    this.replies[i].showText = false;
+                    this.replies[i].textContent = '';
+                    for(let z = 0;z < this.replies[i].ups.length;z++){
+                        if(this.replies[i].ups[z] == this.profile.id){
+                            this.replies[i].action = 'up';
+                        }else{
+                            this.replies[i].action = 'down';
+                        }
                     }
                 }
+                request.getCollect(this.profile.loginname).then(res=>{
+                    let arr = res.data.data;
+                    for(let i = 0;i<arr.length;i++){
+                        if(arr[i].id == this.item.id){
+                            this.item.is_collect = true;
+                            return;
+                        }
+                    }
+                })
             }
-            request.getCollect(this.profile.loginname).then(res=>{
-                let arr = res.data.data;
-                for(let i = 0;i<arr.length;i++){
-                    if(arr[i].id == this.item.id){
-                        this.item.is_collect = true;
-                        return;
-                    }
-                }
-            })
+            
         });
     }
   },
   created() {
     let isLogin = sessionStorage.getItem("isLogin");
     let profile = JSON.parse(sessionStorage.getItem("profile"));
-    this.setLogin();
-    this.setProfile(profile);
-    this.setAccesstoken(sessionStorage.getItem("accesstoken"));
+    if (!this.isLogin && isLogin) {
+        this.setLogin();
+        this.setProfile(profile);
+        this.setAccesstoken(sessionStorage.getItem("accesstoken"));
+    }
     this.doQuery();
   }
 };
