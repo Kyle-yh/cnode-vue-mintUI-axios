@@ -1,14 +1,16 @@
 # cnode
 
-> vue+element
+> vue+mintui+axios
 
 ## Build Setup
 
 ``` bash
 # install dependencies
+下载依赖
 npm install
 
 # serve with hot reload at localhost:8080
+开启服务器后访问localhost:8080
 npm run dev
 
 # build for production with minification
