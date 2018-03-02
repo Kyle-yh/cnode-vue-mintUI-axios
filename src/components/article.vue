@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="contant fadeInUp animated" v-for="item in listItem" :key="item.id">
+        <div class="contant fadeInUp animated" v-for="(item,index) in listItem" :key="item.id">
             <a class="title" @click="goDetail(item.id)">
                 <i class="iconfont icon-top mark" v-show="item.top"></i>
                 <i class="iconfont icon-good mark" v-show="item.good"></i>
@@ -11,8 +11,8 @@
             </a>
             <br>
             <div>
-                <a href="/user/atian25">
-                    <img :src="item.author.avatar_url" class="avator" :alt="item.author.loginname"/>
+                <a href="javescript:;">
+                    <img :src="item.author.avatar_url" class="avator" :alt="item.author.loginname" style="margin-left:5px"/>
                 </a>
                 <div>
                     <p style="margin-bottom: 13px;">
@@ -23,10 +23,15 @@
                     <span class="last_reply_at">{{item.last_reply_at|simpleTime}}</span>
                 </div>
             </div>
+            <div style="text-align:right;margin:5px 10px" v-if="isCollect">
+                <mt-button type="danger" size="small" @click="deCollect(item.id,index)">取消收藏</mt-button>
+            </div>
         </div>
     </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
+import request from "@/js/request.js";
 export default {
   name: "article-list",
   data() {
@@ -38,9 +43,18 @@ export default {
       this.$router.push({
         path: `/detail/${id}`
       });
+    },
+    deCollect(id,index){
+        let accesstoken = sessionStorage.getItem('accesstoken');
+        request.deCollect(accesstoken,id).then(res=>{
+            Toast({
+                message: "取消收藏成功"
+            });
+            this.listItem.splice(index,1)
+        })
     }
   },
-  props: ["listItem"],
+  props: ["listItem","isCollect"],
   watch: {}
 };
 </script>

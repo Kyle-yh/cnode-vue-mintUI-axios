@@ -9,12 +9,17 @@
                     <img :src="item.author.avatar_url" :alt="item.author.loginname">
                     <div class="content">
                         <p class="title">{{item.title}}</p>
-                        <p class="name">{{item.author.loginname}}</p>
+                        <p class="name">{{item.author.loginname}}
+                            <span style="float:right;color:#999">{{item.last_reply_at|simpleTime}}</span>
+                        </p>
                     </div>
                     <div style="clear:both">
 
                     </div>
                 </a>
+                <div style="text-align:right;margin:5px 10px;">
+                    <mt-button type="default" size="small" plain @click="edit(item.id)" v-if="isEidt">编辑</mt-button>
+                </div>
             </li>
         </ul>
     </div>
@@ -32,9 +37,17 @@ export default {
             this.$router.push({
                 path: `/detail/${id}`
             });
+        },
+        edit(id){
+            this.$router.push({
+                name: 'eidt',
+                params:{
+                    id:id
+                }
+            })
         }
     },
-    props:['recentItem']
+    props:['recentItem','isEidt']
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
@@ -62,6 +75,7 @@ export default {
             .name
                 margin-top 10px
                 color #26a2ff
+                margin-right 10px
 .nothing
     text-align center
     margin-top 30px

@@ -168,6 +168,18 @@ const setReaded = (accesstoken,msg_id) =>{
     })
 }
 
+//编辑主题
+const eidtTopic = (accesstoken,title,tab,content,topic_id) => {
+    let url = `${apiUrl}/topics/update`;
+    return httpRequest(url,{
+        accesstoken:accesstoken,
+        title:title,
+        tab:tab,
+        content:content,
+        topic_id:topic_id
+    })
+}
+
 export default {
     getTopics,
     getDetail,
@@ -183,5 +195,6 @@ export default {
     saveTopic,
     getCount,
     setAllReaded,
-    setReaded
+    setReaded,
+    eidtTopic
 }

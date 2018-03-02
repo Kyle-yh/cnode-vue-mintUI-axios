@@ -31,3 +31,4 @@ Vue.filter('simpleTime', (from, to) => {
     }
     return quantity + unit + suffix;
   });
+

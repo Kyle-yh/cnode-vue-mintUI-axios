@@ -20,7 +20,7 @@
             </div>
         </div>
         <h2 class="topic-title">{{item.title}}</h2>
-        <div v-html="item.content"></div>
+        <div v-html="showHtml"></div>
         <div class="height20"></div>
         <div class="collect">
             <mt-button type="danger" @click.native="collect(item.is_collect)">{{item.is_collect ? '已收藏' : '收藏'}}</mt-button>
@@ -84,7 +84,15 @@ export default {
     };
   },
   computed: {
-    ...mapState(["isLogin", "profile","accesstoken"])
+    ...mapState(["isLogin", "profile","accesstoken"]),
+    showHtml() {
+      return this.item.content ? this.item.content
+        .replace(this.item.content ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, "\"")
+        .replace(/&#39;/g, "\'") : this.item.content
+    }
   },
   methods: {
     ...mapMutations(["setLogin", "setProfile", "exitUser","setAccesstoken"]),

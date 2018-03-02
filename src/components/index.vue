@@ -131,9 +131,11 @@ export default {
     request.getPosition().then(res => {
       this.position = res.city
     })
-    request.getCount(this.accesstoken).then(res=>{
-      this.count = res.data.data;
-    })
+    if(this.isLogin){
+      request.getCount(this.accesstoken).then(res=>{
+        this.count = res.data.data;
+      })
+    }
   },
   mounted() {
       this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;

@@ -23,7 +23,7 @@
             </div>
             <mt-tab-container v-model="selected" swipeable>  
                 <mt-tab-container-item id="1">
-                    <recent-list :recentItem="item.recent_topics"/>
+                    <recent-list :recentItem="item.recent_topics" :isEidt="true"/>
                 </mt-tab-container-item>  
                 <mt-tab-container-item id="2"> 
                     <recent-list :recentItem="item.recent_replies"/>

@@ -17,7 +17,7 @@
         <div class="eidt">
             <p><span style="font-size:14px;"> 主题内容：</span></p>
             <p>
-                <vue-html5-editor :content="content" :height="500" @change="updateData"></vue-html5-editor>
+                <vue-html5-editor :content="showHtml" :height="500" @change="updateData"></vue-html5-editor>
             </p>
         </div>
     </div>
@@ -46,8 +46,26 @@ export default {
             content:'',
         }
     },
+    computed: {
+        showHtml() {
+            return this.content ? this.content
+                .replace(this.content ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+                .replace(/&lt;/g, "<")
+                .replace(/&gt;/g, ">")
+                .replace(/&quot;/g, "\"")
+                .replace(/&#39;/g, "\'") : this.content
+        }
+    },
     created(){
-
+         let id = this.$route.params.id;
+         if(id){
+             request.getDetail(id).then(res=>{
+                 let item = res.data.data;
+                 this.selected = item.tab;
+                 this.title = item.title;
+                 this.content = item.content;
+             })
+         }
     },
     methods:{
         save(){
@@ -67,17 +85,33 @@ export default {
                 return;
             }
             let accesstoken = sessionStorage.getItem('accesstoken');
-            request.saveTopic(accesstoken,title,tab,content).then(res=>{
-                Toast({
-                    message: "创建成功"
-                });
-                console.log(res);
-                setTimeout(() => {
-                    this.$router.push({path:`/detail/${res.data.topic_id}`})
-                }, 1000);
-            },err=>{
-                
-            })
+            let id = this.$route.params.id;
+            if(!id){
+                request.saveTopic(accesstoken,title,tab,content).then(res=>{
+                    Toast({
+                        message: "创建成功"
+                    });
+                    console.log(res);
+                    setTimeout(() => {
+                        this.$router.push({path:`/detail/${res.data.topic_id}`})
+                    }, 1000);
+                },err=>{
+                    
+                })
+            }else{
+                request.eidtTopic(accesstoken,title,tab,content,id).then(res=>{
+                    Toast({
+                        message: "编辑成功"
+                    });
+                    console.log(res);
+                    setTimeout(() => {
+                        this.$router.push({path:`/detail/${res.data.topic_id}`})
+                    }, 1000);
+                },err=>{
+                    
+                })
+            }
+            
         },
         updateData(data){
             this.content = data;

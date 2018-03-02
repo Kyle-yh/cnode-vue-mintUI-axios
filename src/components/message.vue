@@ -2,7 +2,7 @@
     <div>
         <mt-header title="消息" fixed>
             <mt-button icon="back" slot="left" @click="$router.go(-1)"></mt-button>
-            <mt-button slot="right" v-show="isShow" @click="setAllReaded()">全部设为已读</mt-button>
+            <mt-button slot="right" v-show="isShow && notReadItem.length > 0" @click="setAllReaded()">全部设为已读</mt-button>
         </mt-header>
         <div style="margin-top:40px">
             <div>
@@ -13,7 +13,7 @@
             </div>
             <mt-tab-container v-model="selected" swipeable>  
                 <mt-tab-container-item id="1">
-                    <message-cell :messageItem="hasReadItem" :accesstoken="accesstoken"></message-cell>
+                    <message-cell :messageItem="hasReadItem"></message-cell>
                 </mt-tab-container-item>  
                 <mt-tab-container-item id="2"> 
                     <message-cell @doQuery="doQuery" :messageItem="notReadItem" :accesstoken="accesstoken"></message-cell>

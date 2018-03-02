@@ -4,7 +4,7 @@
             <mt-button icon="back" slot="left" @click="$router.go(-1)"></mt-button>
         </mt-header>
         <div class="container-padding"></div>
-        <article-list :listItem="item"/>
+        <article-list :listItem="item" :isCollect="true"/>
     </div>
 </template>
 <script>
@@ -16,11 +16,16 @@ export default {
             item:[]
         }
     },
+    methods:{
+        doQuery(){
+            let profile = JSON.parse(sessionStorage.getItem('profile'))
+            request.getCollect(profile.loginname).then(res=>{
+                this.item = res.data.data
+            })
+        }
+    },
     created(){
-        let profile = JSON.parse(sessionStorage.getItem('profile'))
-        request.getCollect(profile.loginname).then(res=>{
-            this.item = res.data.data
-        })
+        this.doQuery();
     },
     components: {
         "article-list": artileList
