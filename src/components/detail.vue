@@ -137,7 +137,7 @@ export default {
             this.goLogin();
             return;
         }
-        if(this.replies[index].author.loginname == this.item.author.loginname){
+        if(this.replies[index].author.loginname == this.profile.loginname){
             Toast({
               message: "不能帮自己点赞"
             });
